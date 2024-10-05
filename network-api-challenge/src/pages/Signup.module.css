@@ -1,0 +1,19 @@
+.signup {
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputForm {
+  margin-top: 32px;
+  gap: 32px;
+  flex-direction: column;
+  display: flex;
+  width: 75%;
+  margin-bottom: 16px;
+}
+
+.textFont {
+  font-family: "Archivo Black", sans-serif !important;
+}
