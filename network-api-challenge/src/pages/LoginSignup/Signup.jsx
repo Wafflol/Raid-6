@@ -2,7 +2,7 @@ import { Typography, Stack, TextField, Button } from '@mui/material';
 import { useMemo } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import styles from './Signup.module.css';
+import styles from './LoginSignup.module.css';
 
 export const Signup = () => {
 

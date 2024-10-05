@@ -1,0 +1,23 @@
+.navTab {
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px black solid;
+}
+
+.singleTab {
+  width: 50%;
+  height: 80px;
+}
+
+.leftTab {
+  border-right: 1px black solid;
+}
+
+.tabIcon {
+  width: 50px;
+  height: 50px;
+  color: black;
+}
