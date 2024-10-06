@@ -23,6 +23,7 @@
 .gridContainer {
   padding-bottom: 140px;
   overflow: scroll;
+  padding-top: 16px;
 }
 
 .gridItem {

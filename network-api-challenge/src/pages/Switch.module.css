@@ -4,7 +4,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  border-top: 1px black solid;
+  border-top: 3px black solid;
   background-color: white;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .leftTab {
-  border-right: 1px black solid !important;
+  border-right: 3px black solid !important;
 }
 
 .tabIcon {
@@ -29,7 +29,7 @@
   background-color: white;
   margin: auto;
   width: 100vw;
-  border-bottom: 1px black solid;
+  border-bottom: 3px black solid;
 }
 
 .spacer {

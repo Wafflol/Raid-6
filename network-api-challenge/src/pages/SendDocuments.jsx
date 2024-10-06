@@ -102,10 +102,11 @@ export const SendDocuments = (props) => {
   return (
     <Stack className={styles.mainContainer}>
       <Stack sx={{height: '100px'}}>
-        <Button variant='contained' sx={{bgcolor: 'black', position: 'fixed', top: '70px', right: '31%'}} type='submit' onClick={handleClickOpen}>
+        <Button variant='contained' sx={{position: 'fixed', top: '70px', right: '31%'}} type='submit' onClick={handleClickOpen}>
           New Document
         </Button>
       </Stack>
+      <Typography variant='h5' sx={{borderBottom: '2px black solid', marginTop: '16px', width: '100%'}}>Documents Sent</Typography>
       <Stack spacing={4} className={styles.gridContainer}>
         <div className={styles.grid}>
           {dummyArray.map((doc, i) => {return (
