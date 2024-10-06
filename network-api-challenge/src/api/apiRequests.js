@@ -10,7 +10,12 @@ export const login = async (body) => {
 }
 
 export const register = async (body) => {
-
+  try {
+    const response = await axiosInstance.post('/register', body);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 export const sendDocument = async (body) => {

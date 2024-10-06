@@ -7,14 +7,21 @@ import styles from './Switch.module.css';
 import { DocumentCentre } from "./DocumentCentre";
 import { SendDocuments } from "./SendDocuments";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../context/appContexts";
 
 export const Switch = () => {
 
   const navigate = useNavigate();
   const [title, setTitle] = useState("")
 
+  const { isLoggedIn } = useContext(AppContext);
+
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/');
+    }
+
     const location = window.location.href.split('/');
     const endRef = location[location.length - 1];
     if (endRef === "home") {

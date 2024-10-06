@@ -1,10 +1,17 @@
 import { Typography, Stack, TextField, Button } from '@mui/material';
-import { useMemo } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import styles from './LoginSignup.module.css';
+import { register } from '../../api/apiRequests';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../context/appContexts';
 
 export const Signup = () => {
+
+  const navigate = useNavigate();
+  const [error, setError] = useState(false);
+  const { setIsLoggedIn } = useContext(AppContext);
 
   const schema = useMemo(
     () =>
@@ -31,8 +38,14 @@ export const Signup = () => {
         image: null
     },
     validationSchema: schema,
-    onSubmit: async () => {
-      console.log("sent");
+    onSubmit: async (values) => {
+      const response = await register(values);
+      if (response) {
+        setIsLoggedIn(true);
+        navigate('/home');
+      } else {
+        setError(true);
+      }
     },
 });
 
@@ -81,6 +94,7 @@ export const Signup = () => {
           Submit
         </Button>
       </form>
+      {error && <Typography variant='p' sx={{color: 'red'}}>There was an error while trying to sign up</Typography>}
       <Typography variant='p'>Have an account <a href='/'>login</a></Typography>
     </Stack>
   )
