@@ -8,27 +8,6 @@ import {uploadFile, fromBase64ToFile} from './aws.js'
 const app = express()
 const port = 3000
 
-async function sendPhoneNumberRequest(phoneNum) {
-    const data = {
-        phoneNumber: phoneNum
-    };
-    await axios.post('https://pplx.azurewebsites.net/api/rapid/v0/numberVerification/verify', data, {
-        headers: {
-            'Authorization': 'Bearer ed6318',
-            'Cache-Control': 'no-cache',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then((result) => {
-        return result.data.devicePhoneNumberVerified;
-    })
-    .catch((err) => {
-        console.log(err)
-        return false
-    })
-}
-
 //createAllTables();
 
 app.use(express.json())
@@ -55,12 +34,28 @@ app.post('/register', async (req, res) => {
     res.status(201).send("User creation successful")
 })
 
-app.post("/login", async (req, res) => {
-    if (sendPhoneNumberRequest(req.body.phoneNumber)) {
-        res.status(200).send("Login Successful")
-    } else {
-        res.status(401).send("Login Unsuccessful")
-    }
+app.post("/login", (req, res) => {
+    const data = {
+        phoneNumber: req.body.phoneNumber
+    };
+    axios.post('https://pplx.azurewebsites.net/api/rapid/v0/numberVerification/verify', data, {
+        headers: {
+            'Authorization': 'Bearer ed6318',
+            'Cache-Control': 'no-cache',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((result) => {
+        if (result.data.devicePhoneNumberVerified) {
+            res.status(200).send({"login":true})
+        } else { 
+            res.status(401).send({"login":false})
+        }
+    })
+    .catch((err) => {
+        res.status(400).send(err)
+    })
 })
 
 app.get('all-documents/', (req, res) => {
