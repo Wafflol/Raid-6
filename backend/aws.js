@@ -6,8 +6,8 @@ import { Buffer } from 'node:buffer';
 
 // Configure AWS SDK
 AWS.config.update({
-    accessKeyId: 'AKIAQZFG4VI2DTC3PS3D',        // Replace with your AWS Access Key
-    secretAccessKey: 'EQYf3s4LYO8ifGKFasckCoUmur/Dx9De7IxK0rPx', // Replace with your AWS Secret Key
+    accessKeyId: '',        // Replace with your AWS Access Key
+    secretAccessKey: '', // Replace with your AWS Secret Key
     region: 'us-east-2'                 // e.g., 'us-west-1', 'us-east-1', etc.
 });
 
