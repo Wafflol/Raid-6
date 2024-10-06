@@ -1,10 +1,18 @@
 import { Typography, Stack, TextField, Button } from '@mui/material';
-import { useMemo } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import styles from './LoginSignup.module.css';
+import { login } from '../../api/apiRequests';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../context/appContexts';
 
 export const Login = () => {
+
+  const navigate = useNavigate();
+  const [loginFailed, setLoginFailed] = useState(false);
+
+  const { setIsLoggedIn } = useContext(AppContext);
 
   const schema = useMemo(
     () =>
@@ -21,8 +29,15 @@ export const Login = () => {
         phoneNumber: '',
     },
     validationSchema: schema,
-    onSubmit: async () => {
-      console.log("sent");
+    onSubmit: async (values) => {
+      const isAuthenticated = await login(values);
+      try{
+          if (isAuthenticated.data.login === true) {
+                  setIsLoggedIn(true);
+                  navigate('/home');
+          }
+      } catch (e) {setLoginFailed((prev) => {return !prev});}
+
     },
 });
 
@@ -42,10 +57,11 @@ export const Login = () => {
           error={Boolean(form.touched.phoneNumber) && Boolean(form.errors.phoneNumber)}
           fullWidth
         />
-        <Button type='submit' variant='contained'>
+        <Button sx={{backgroundColor: 'black' }} type='submit' variant='contained'>
           Submit
         </Button>
       </form>
+      {loginFailed && <Typography sx={{color: 'red'}} variant='p' >Phone number does not match device phone number!</Typography>}
       <Typography variant='p'>Don't have an account <a href='/signup'>sign up</a></Typography>
     </Stack>
   )

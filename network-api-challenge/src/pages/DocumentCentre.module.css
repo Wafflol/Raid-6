@@ -1,0 +1,20 @@
+.gridItem {
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+}
+
+.gridLayer {
+  flex-direction: row;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.mainContainer {
+  padding-top: 60px;
+  padding-bottom: 60px;
+  overflow: scroll;
+}
