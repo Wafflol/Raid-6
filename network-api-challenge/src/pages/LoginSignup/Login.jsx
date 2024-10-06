@@ -31,12 +31,13 @@ export const Login = () => {
     validationSchema: schema,
     onSubmit: async (values) => {
       const isAuthenticated = await login(values);
-      if (isAuthenticated.data.login === true) {
-        setIsLoggedIn(true);
-        navigate('/home');
-      } else {
-        setLoginFailed(true);
-      }
+      try{
+          if (isAuthenticated.data.login === true) {
+                  setIsLoggedIn(true);
+                  navigate('/home');
+          }
+      } catch (e) {setLoginFailed((prev) => {return !prev});}
+
     },
 });
 
