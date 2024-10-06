@@ -6,7 +6,7 @@ import { AppContext } from '../context/appContexts';
 
 export const DocumentCentre = (props) => {
 
-  const {setAddSignButton} = useContext(AppContext);
+  const {setAddSignButton, setDoc} = useContext(AppContext);
 
   const dummyArray = [];
   for (let i = 0; i < 16; i++) {
@@ -15,6 +15,7 @@ export const DocumentCentre = (props) => {
 
   const handleNavigate = () => {
     setAddSignButton(true);
+    setDoc("https://drive.google.com/file/d/1AXe6tiFhd1BjwcvkVDeqGWe4TUsYxsAT/preview")
     props.switchPage("/home/viewer");
   }
 

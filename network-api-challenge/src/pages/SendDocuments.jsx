@@ -10,7 +10,7 @@ import CreateIcon from '@mui/icons-material/Create';
 
 export const SendDocuments = (props) => {
 
-  const {setAddSignButton} = useContext(AppContext);
+  const {setAddSignButton, setDoc} = useContext(AppContext);
 
   const [fileName, setFileName] = useState(null);
   const [base64, setBase64] = useState('');
@@ -55,6 +55,7 @@ export const SendDocuments = (props) => {
 
   const handleNavigate = () => {
     setAddSignButton(false);
+    setDoc("https://drive.google.com/file/d/1ORUFcb1RF4RW-s1wBrBQI8S-OYx7fqlD/preview")
     props.switchPage("/home/viewer");
   }
 

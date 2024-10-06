@@ -5,11 +5,14 @@ export const AppContext = createContext({
   setIsLoggedIn: () => {},
   addSignButton: true,
   setAddSignButton: () => {},
+  doc: '',
+  setDoc: () => {},
 });
 
 export const AppContextsProvider = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [addSignButton, setAddSignButton] = useState(true);
+  const [doc, setDoc] = useState('');
 
   const resetContext = () => {
     setIsLoggedIn(false);
@@ -22,6 +25,8 @@ export const AppContextsProvider = ({children}) => {
         setIsLoggedIn,
         addSignButton,
         setAddSignButton,
+        doc,
+        setDoc,
         resetContext,
       }}
     >
