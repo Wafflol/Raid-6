@@ -17,3 +17,7 @@
 .textFont {
   font-family: "Archivo Black", sans-serif !important;
 }
+
+.errorText {
+    color: "red";
+}
