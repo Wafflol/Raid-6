@@ -20,9 +20,18 @@ export const register = async (body) => {
 
 export const sendDocument = async (body) => {
   try {
-    const response = await axiosInstance.post("/upload", body);
+    await axiosInstance.post("/upload", body);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+export const verifySignature = async (body) => {
+  try {
+    const response = await axiosInstance.post("/location", body);
     return response;
   } catch (e) {
-    return e;
+    return false;
   }
 }

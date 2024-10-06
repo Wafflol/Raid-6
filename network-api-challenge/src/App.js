@@ -13,11 +13,9 @@ function App() {
       <Router>
         <Routes>
           <Route path="/signup" Component={Signup}/>
-          <Route path="/viewer" element={<Viewer pdfUrl={"https://www.mta.ca/~rrosebru/oldcourse/263114/Dsa.pdf"}/>}/>
           <Route path='/' Component={Login} />
           <Route path="/home/*" Component={Switch}/>
           <Route path='/OTP' Component={OTP}/>
-
         </Routes>
       </Router>
     </div>
