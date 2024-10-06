@@ -77,7 +77,7 @@ export const Signup = () => {
         <div>
           <input onChange={(e) => form.setFieldValue('image', e.currentTarget.files[0])} type="file" accept="image/*"></input>
         </div>
-        <Button type='submit' variant='contained'>
+        <Button sx={{backgroundColor: 'black' }} type='submit' variant='contained'>
           Submit
         </Button>
       </form>

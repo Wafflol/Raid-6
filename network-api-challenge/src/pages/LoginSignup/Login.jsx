@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import styles from './LoginSignup.module.css';
+import { login } from '../../api/apiRequests';
 
 export const Login = () => {
 
@@ -21,8 +22,9 @@ export const Login = () => {
         phoneNumber: '',
     },
     validationSchema: schema,
-    onSubmit: async () => {
-      console.log("sent");
+    onSubmit: async (values) => {
+      const response = await login(values);
+      console.log(response);
     },
 });
 
@@ -42,7 +44,7 @@ export const Login = () => {
           error={Boolean(form.touched.phoneNumber) && Boolean(form.errors.phoneNumber)}
           fullWidth
         />
-        <Button type='submit' variant='contained'>
+        <Button sx={{backgroundColor: 'black' }} type='submit' variant='contained'>
           Submit
         </Button>
       </form>
