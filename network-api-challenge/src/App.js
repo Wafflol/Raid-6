@@ -13,7 +13,7 @@ function App() {
           <Route path="/" Component={Switch}/>
           <Route path="/signup" Component={Signup}/>
           <Route path='/login' Component={Login} />
-          <Route path="/viewer" Component={Viewer} />
+          <Route path="/viewer" element={<Viewer pdfUrl={"https://www.mta.ca/~rrosebru/oldcourse/263114/Dsa.pdf"}/>}/>
         </Routes>
       </Router>
     </div>
@@ -21,22 +21,3 @@ function App() {
 }
 
 export default App;
-
-{/*
-// App.js
-import React from 'react';
-import PdfViewer from './PdfViewer';
-
-const App = () => {
-    const pdfUrl = ''; // URL to the PDF
-
-    return (
-        <div>
-            <h1>PDF Viewer</h1>
-            <PdfViewer pdfUrl={pdfUrl} />
-        </div>
-    );
-};
-
-export default App;
-*/}
