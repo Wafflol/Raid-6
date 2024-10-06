@@ -26,3 +26,12 @@ export const sendDocument = async (body) => {
     return false;
   }
 }
+
+export const verifySignature = async (body) => {
+  try {
+    const response = await axiosInstance.post("/location", body);
+    return response;
+  } catch (e) {
+    return false;
+  }
+}

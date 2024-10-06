@@ -1,8 +1,10 @@
 import { Button, Dialog, Stack, Typography } from "@mui/material";
 import { useState } from "react";
+import { verifySignature } from "../../api/apiRequests";
 
 export const Viewer = ({ pdfUrl }) => {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -12,8 +14,14 @@ export const Viewer = ({ pdfUrl }) => {
     setOpen(false);
   }
 
-  const handleSign = () => {
-    handleClickOpen();
+  const handleSign = async () => {
+    const response = await verifySignature({phoneNumber: "1234567890"});
+    if (response) {
+      setError(false);
+      handleClickOpen();
+    } else {
+      setError(true);
+    }
   }
 
   return (
@@ -31,7 +39,7 @@ export const Viewer = ({ pdfUrl }) => {
         onClose={handleOnClose}
         PaperProps={{ sx: {bgcolor: 'transparent'} }}
       >
-        <Typography sx={{color: 'green', fontFamily: "Archivo Black"}}>Successfully Signed Document</Typography>
+        {error ? <Typography sx={{color: 'red', fontFamily: "Archivo Black"}}>Verification failed. Please go to the required location</Typography> : <Typography sx={{color: 'green', fontFamily: "Archivo Black"}}>Successfully Signed Document</Typography>}
       </Dialog>
     </Stack>
   );

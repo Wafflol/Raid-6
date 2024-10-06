@@ -6,7 +6,7 @@ import axios from 'axios'
 import {uploadFile, fromBase64ToFile} from './aws.js'
 
 const app = express()
-const port = 3000
+const port = 4000
 
 //createAllTables();
 
@@ -16,8 +16,10 @@ app.use(cors())
 app.post('/upload', async (req, res) => {
     try {
         console.log(req.body)
-        uploadFile(req.body.fileName, req.body.encodedFile, 'rogershack24')
+        uploadFile(req.body.fileName, req.body.encodedFile, 'rogershack24');
+        // await p.query(`INSERT INTO Document(senderNumber, receiverNumber, expiryDate, documentUrl, signed, latitude, longitude) VALUES ("1234567890", "${req.body.phoneNumber}", "2024-10-16", "", 49.261407206266355, -123.24892057404195)`);
         
+        // 49.261407206266355, -123.24892057404195
         res.status(200).send("File uploaded")
     }
     catch (err) {
@@ -70,6 +72,38 @@ app.post('decision/', (req, res) => {
     //depending on the users decision update the db
     //if user accepts notify the sender and replace old doc with new
     //if user declines, purge the document from S3 
+})
+
+app.post('/location', (req, res) => {
+    const data = {
+        phoneNumber: req.body.phoneNumber,
+        area: {
+            "areaType": "CIRCLE",
+            "center": {
+                "latitude": 49.261407206266355,
+                "longitude": -123.24892057404195,
+            },
+            "radius": 50000
+        }
+    };
+    axios.post('https://pplx.azurewebsites.net/api/rapid/v0/location-verification/verify', data, {
+        headers: {
+            'Authorization': 'Bearer ed6318',
+            'Cache-Control': 'no-cache',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((result) => {
+        if (result.data.verificationResult) {
+            res.status(200).send({"verified":true})
+        } else { 
+            res.status(200).send({"verified":true})
+        }
+    })
+    .catch((err) => {
+        res.status(400).send(err)
+    })
 })
 
 app.listen(port, () => {
