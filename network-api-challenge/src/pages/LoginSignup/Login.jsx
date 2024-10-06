@@ -1,11 +1,15 @@
 import { Typography, Stack, TextField, Button } from '@mui/material';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import styles from './LoginSignup.module.css';
 import { login } from '../../api/apiRequests';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+
+    const navigate = useNavigate();
+    const [loginFailed, setLoginFailed] = useState(false);
 
   const schema = useMemo(
     () =>
@@ -23,8 +27,13 @@ export const Login = () => {
     },
     validationSchema: schema,
     onSubmit: async (values) => {
-      const response = await login(values);
-      console.log(response);
+      const isAuthenticated = await login(values);
+      console.log(isAuthenticated);
+      if (isAuthenticated === true) {
+        navigate('/home');
+      } else {
+          setLoginFailed(true);
+      }
     },
 });
 
@@ -48,6 +57,7 @@ export const Login = () => {
           Submit
         </Button>
       </form>
+      {loginFailed && <Typography className={styles.errorText} variant='p' >Phone number does not match device phone number!</Typography>}
       <Typography variant='p'>Don't have an account <a href='/signup'>sign up</a></Typography>
     </Stack>
   )
