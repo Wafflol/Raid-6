@@ -1,0 +1,11 @@
+.textFont {
+  font-family: "Archivo Black", sans-serif !important;
+}
+
+.viewer {
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
