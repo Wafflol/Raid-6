@@ -1,8 +1,12 @@
 import { Button, Dialog, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { verifySignature } from "../../api/apiRequests";
+import { AppContext } from "../../context/appContexts";
 
 export const Viewer = ({ pdfUrl }) => {
+
+  const {addSignButton} = useContext(AppContext);
+
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
 
@@ -26,7 +30,7 @@ export const Viewer = ({ pdfUrl }) => {
 
   return (
     <Stack>
-      <Button variant="contained" sx={{borderRadius: '0 0 4px', position: 'fixed', top: '57px'}} onClick={handleSign}>Sign Document</Button>
+      {addSignButton && <Button variant="contained" sx={{borderRadius: '0 0 4px', position: 'fixed', top: '57px'}} onClick={handleSign}>Sign Document</Button>}
       <Stack style={{ height: '100vh', width: '100vw', overflow: 'hidden'}}> {/* Overflow hidden on parent Stack */}
         <iframe
           src={pdfUrl}
@@ -37,9 +41,9 @@ export const Viewer = ({ pdfUrl }) => {
       <Dialog
         open={open}
         onClose={handleOnClose}
-        PaperProps={{ sx: {bgcolor: 'transparent'} }}
+        PaperProps={{ sx: {bgcolor: 'transparent', boxShadow: 'none'} }}
       >
-        {error ? <Typography sx={{color: 'red', fontFamily: "Archivo Black"}}>Verification failed. Please go to the required location</Typography> : <Typography sx={{color: 'green', fontFamily: "Archivo Black"}}>Successfully Signed Document</Typography>}
+        {error ? <Typography sx={{color: 'red', fontFamily: "Archivo Black", filter: 'brightness(1.75)'}}>Verification failed. Please go to the required location</Typography> : <Typography sx={{color: 'green', fontFamily: "Archivo Black", filter: 'brightness(1.75)'}}>Successfully Signed Document</Typography>}
       </Dialog>
     </Stack>
   );

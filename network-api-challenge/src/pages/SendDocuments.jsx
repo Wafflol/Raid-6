@@ -1,11 +1,16 @@
 import { Button, Stack, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, Select, MenuItem, TextField  } from '@mui/material'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useContext } from 'react'
 import { sendDocument } from '../api/apiRequests';
 import styles from './SendDocuments.module.css'
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import ArticleIcon from '@mui/icons-material/Article';
+import { AppContext } from '../context/appContexts';
+import CreateIcon from '@mui/icons-material/Create';
 
-export const SendDocuments = () => {
+export const SendDocuments = (props) => {
+
+  const {setAddSignButton} = useContext(AppContext);
 
   const [fileName, setFileName] = useState(null);
   const [base64, setBase64] = useState('');
@@ -16,13 +21,17 @@ export const SendDocuments = () => {
   const [error, setError] = useState(false);
   const [fileNotThere, setFileNotThere] = useState(false);
 
+  const dummyArray = [];
+  for (let i = 0; i < 16; i++) {
+    if (i == 0) {
+      dummyArray.push(["Document " + (i + 1), true]);
+    } else {
+      dummyArray.push(["Document " + (i + 1), false]);
+    }
+  }
+
     const handleClickOpen = () => {
-      if (fileName) {
-        setOpenDialog(true);
-        setFileNotThere(false);
-      } else {
-        setFileNotThere(true);
-      }
+      setOpenDialog(true);
     };
 
     const handleClose = () => {
@@ -43,6 +52,11 @@ export const SendDocuments = () => {
       setBase64(reader.result);
     };
   };
+
+  const handleNavigate = () => {
+    setAddSignButton(false);
+    props.switchPage("/home/viewer");
+  }
 
     const schema = useMemo(
       () =>
@@ -68,24 +82,43 @@ export const SendDocuments = () => {
       },
       validationSchema: schema,
       onSubmit: async (values) => {
+        console.log(fileName);
+        if (!fileName) {
+          setError("A document to sign is required");
+          return;
+        }
         const response = await sendDocument({fileName: fileName, encodedFile: base64, phoneNumber: phoneNumber, expiryDate: date, location: location});
         if (response) {
-          console.log(response);
+          form.resetForm();
+          setFileName(null);
+          setBase64(null);
           handleClose();
+        } else {
+          setError("an error occurred");
         }
       },
   });
 
   return (
     <Stack className={styles.mainContainer}>
-      <Typography variant='h5'>To get started, upload a pdf!</Typography>
-      <div>
-        <input onChange={handleFileChange} type="file" accept="application/pdf"/>
-      </div>
-      <Button sx={{color: 'black'}} type='submit' onClick={handleClickOpen}>
-        Submit
-      </Button>
-      {fileNotThere && <Typography sx={{color: 'red'}}>Please input a file before submitting</Typography>}
+      <Stack sx={{height: '100px'}}>
+        <Button variant='contained' sx={{bgcolor: 'black', position: 'fixed', top: '70px', right: '31%'}} type='submit' onClick={handleClickOpen}>
+          New Document
+        </Button>
+      </Stack>
+      <Stack spacing={4} className={styles.gridContainer}>
+        <div className={styles.grid}>
+          {dummyArray.map((doc, i) => {return (
+            <Stack className={styles.gridItem}>
+              <Stack direction='row' spacing={2}>
+                <Typography>{doc[0]}</Typography>
+                {doc[1] && <CreateIcon sx={{ color: 'rgb(24, 119, 242)'}}/>}
+              </Stack>
+              <ArticleIcon style={{width: '70%', height: '100%'}} onClick={handleNavigate}/>
+            </Stack>
+          )})}
+        </div>
+    </Stack>
       <Dialog open={openDialog} onClose={handleClose}>
          <DialogTitle id="alert-dialog-title">{"Select Secure Form Options"}</DialogTitle>
             <DialogContent>
@@ -137,7 +170,11 @@ export const SendDocuments = () => {
                       fullWidth
                   />
                 </FormControl>
+                <div>
+                  <input onChange={handleFileChange} type="file" accept="application/pdf"/>
+                </div>
                 </form>
+                <Typography sx={{color: 'red'}}>{error}</Typography>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} color="primary">

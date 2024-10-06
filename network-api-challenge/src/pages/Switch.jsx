@@ -22,7 +22,7 @@ export const Switch = () => {
     if (!isLoggedIn) {
       navigate('/');
     }
-// test
+
     const location = window.location.href.split('/');
     const endRef = location[location.length - 1];
     if (endRef === "home") {
@@ -53,7 +53,7 @@ export const Switch = () => {
       </div>
       <Routes>
         <Route path='/' element={<DocumentCentre switchPage={switchPage} />}/>
-        <Route exact path='/send' Component={SendDocuments} />
+        <Route exact path='/send' element={<SendDocuments switchPage={switchPage}/>} />
         <Route path="/viewer" element={<Viewer pdfUrl={"https://www.mta.ca/~rrosebru/oldcourse/263114/Dsa.pdf"}/>} />
       </Routes>
       <Tabs className={styles.navTab}>

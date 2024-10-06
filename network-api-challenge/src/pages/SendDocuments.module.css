@@ -14,3 +14,19 @@
   display: flex;
   margin-bottom: 16px;
 }
+
+.grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.gridContainer {
+  padding-bottom: 140px;
+  overflow: scroll;
+}
+
+.gridItem {
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+}
