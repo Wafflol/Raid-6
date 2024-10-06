@@ -6,3 +6,12 @@
   padding-bottom: 60px;
   width: 100vw;
 }
+
+.inputForm {
+  margin-top: 32px;
+  gap: 32px;
+  flex-direction: column;
+  display: flex;
+  width: 75%;
+  margin-bottom: 16px;
+}
