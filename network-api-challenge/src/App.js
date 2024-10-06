@@ -10,9 +10,9 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" Component={Switch}/>
           <Route path="/signup" Component={Signup}/>
-          <Route path='/login' Component={Login} />
+          <Route path='/' Component={Login} />
+          <Route path="/home/*" Component={Switch}/>
           <Route path='/OTP' Component={OTP}/>
         </Routes>
       </Router>
