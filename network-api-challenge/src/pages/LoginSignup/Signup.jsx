@@ -81,7 +81,7 @@ export const Signup = () => {
           Submit
         </Button>
       </form>
-      <Typography variant='p'>Have an account <a href='/login'>login</a></Typography>
+      <Typography variant='p'>Have an account <a href='/'>login</a></Typography>
     </Stack>
   )
 }
