@@ -22,7 +22,7 @@ export const Switch = () => {
     if (!isLoggedIn) {
       navigate('/');
     }
-
+// test
     const location = window.location.href.split('/');
     const endRef = location[location.length - 1];
     if (endRef === "home") {
