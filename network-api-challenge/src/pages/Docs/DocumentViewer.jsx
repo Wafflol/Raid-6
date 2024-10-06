@@ -1,6 +1,6 @@
 export const Viewer = ({ pdfUrl }) => {
   return (
-    <div style={{ height: '100vh', overflow: 'hidden' }}> {/* Overflow hidden on parent div */}
+    <div style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}> {/* Overflow hidden on parent div */}
       <iframe
         src={pdfUrl}
         title="PDF Viewer"
