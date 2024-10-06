@@ -14,9 +14,15 @@ export const SendDocuments = () => {
   const [location, setLocation] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [error, setError] = useState(false);
+  const [fileNotThere, setFileNotThere] = useState(false);
 
     const handleClickOpen = () => {
-      setOpenDialog(true);
+      if (fileName) {
+        setOpenDialog(true);
+        setFileNotThere(false);
+      } else {
+        setFileNotThere(true);
+      }
     };
 
     const handleClose = () => {
@@ -43,13 +49,13 @@ export const SendDocuments = () => {
         yup.object({
           phoneNumber: yup
               .string()
-              .required(),
+              .required("field required"),
           date: yup
               .string()
-              .required(),
+              .required("field required"),
           location: yup
               .string()
-              .required(),
+              .required("field required"),
         }),
       []
     );
@@ -65,8 +71,7 @@ export const SendDocuments = () => {
         const response = await sendDocument({fileName: fileName, encodedFile: base64, phoneNumber: phoneNumber, expiryDate: date, location: location});
         if (response) {
           console.log(response);
-        } else {
-          setError(true);
+          handleClose();
         }
       },
   });
@@ -80,10 +85,11 @@ export const SendDocuments = () => {
       <Button sx={{color: 'black'}} type='submit' onClick={handleClickOpen}>
         Submit
       </Button>
+      {fileNotThere && <Typography sx={{color: 'red'}}>Please input a file before submitting</Typography>}
       <Dialog open={openDialog} onClose={handleClose}>
          <DialogTitle id="alert-dialog-title">{"Select Secure Form Options"}</DialogTitle>
             <DialogContent>
-                <form className={styles.inputForm}>
+              <form className={styles.inputForm}>
                 {/* Input Phone Number*/}
                 <FormControl fullWidth>
                     <TextField
@@ -95,6 +101,7 @@ export const SendDocuments = () => {
                       onChange={form.handleChange}
                       onBlur={form.handleBlur}
                       error={Boolean(form.touched.phoneNumber) && Boolean(form.errors.phoneNumber)}
+                      helperText={form.touched.phoneNumber && form.errors.phoneNumber}
                       fullWidth
                     />
                 </FormControl>
@@ -110,6 +117,7 @@ export const SendDocuments = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                     error={Boolean(form.touched.date) && Boolean(form.errors.date)}
+                    helperText={form.touched.date && form.errors.date}
                     fullWidth
                   />
                 </FormControl>
@@ -125,6 +133,7 @@ export const SendDocuments = () => {
                       onChange={form.handleChange}
                       onBlur={form.handleBlur}
                       error={Boolean(form.touched.location) && Boolean(form.errors.location)}
+                      helperText={form.touched.location && form.errors.location}
                       fullWidth
                   />
                 </FormControl>
@@ -134,7 +143,7 @@ export const SendDocuments = () => {
                 <Button onClick={handleClose} color="primary">
                   Cancel
                 </Button>
-                <Button onClick={handleClose} color="primary" autoFocus>
+                <Button onClick={form.handleSubmit} color="primary" type='submit'>
                   Confirm
                 </Button>
               </DialogActions>
