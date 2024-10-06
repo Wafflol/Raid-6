@@ -1,11 +1,16 @@
 import { Button, Stack, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, Select, MenuItem, TextField  } from '@mui/material'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useContext } from 'react'
 import { sendDocument } from '../api/apiRequests';
 import styles from './SendDocuments.module.css'
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import ArticleIcon from '@mui/icons-material/Article';
+import { AppContext } from '../context/appContexts';
+import CreateIcon from '@mui/icons-material/Create';
 
-export const SendDocuments = () => {
+export const SendDocuments = (props) => {
+
+  const {setAddSignButton, setDoc} = useContext(AppContext);
 
   const [fileName, setFileName] = useState(null);
   const [base64, setBase64] = useState('');
@@ -14,6 +19,16 @@ export const SendDocuments = () => {
   const [location, setLocation] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [error, setError] = useState(false);
+  const [fileNotThere, setFileNotThere] = useState(false);
+
+  const dummyArray = [];
+  for (let i = 0; i < 16; i++) {
+    if (i == 0) {
+      dummyArray.push(["Document " + (i + 1), true]);
+    } else {
+      dummyArray.push(["Document " + (i + 1), false]);
+    }
+  }
 
     const handleClickOpen = () => {
       setOpenDialog(true);
@@ -38,18 +53,24 @@ export const SendDocuments = () => {
     };
   };
 
+  const handleNavigate = () => {
+    setAddSignButton(false);
+    setDoc("https://drive.google.com/file/d/1ORUFcb1RF4RW-s1wBrBQI8S-OYx7fqlD/preview")
+    props.switchPage("/home/viewer");
+  }
+
     const schema = useMemo(
       () =>
         yup.object({
           phoneNumber: yup
               .string()
-              .required(),
+              .required("field required"),
           date: yup
               .string()
-              .required(),
+              .required("field required"),
           location: yup
               .string()
-              .required(),
+              .required("field required"),
         }),
       []
     );
@@ -62,28 +83,48 @@ export const SendDocuments = () => {
       },
       validationSchema: schema,
       onSubmit: async (values) => {
+        console.log(fileName);
+        if (!fileName) {
+          setError("A document to sign is required");
+          return;
+        }
         const response = await sendDocument({fileName: fileName, encodedFile: base64, phoneNumber: phoneNumber, expiryDate: date, location: location});
         if (response) {
-          console.log(response);
+          form.resetForm();
+          setFileName(null);
+          setBase64(null);
+          handleClose();
         } else {
-          setError(true);
+          setError("an error occurred");
         }
       },
   });
 
   return (
     <Stack className={styles.mainContainer}>
-      <Typography variant='h5'>To get started, upload a pdf!</Typography>
-      <div>
-        <input onChange={handleFileChange} type="file" accept="application/pdf"/>
-      </div>
-      <Button sx={{color: 'black'}} type='submit' onClick={handleClickOpen}>
-        Submit
-      </Button>
+      <Stack sx={{height: '100px'}}>
+        <Button variant='contained' sx={{position: 'fixed', top: '70px', right: '31%'}} type='submit' onClick={handleClickOpen}>
+          New Document
+        </Button>
+      </Stack>
+      <Typography variant='h5' sx={{borderBottom: '2px black solid', marginTop: '16px', width: '100%'}}>Documents Sent</Typography>
+      <Stack spacing={4} className={styles.gridContainer}>
+        <div className={styles.grid}>
+          {dummyArray.map((doc, i) => {return (
+            <Stack className={styles.gridItem}>
+              <Stack direction='row' spacing={2}>
+                <Typography>{doc[0]}</Typography>
+                {doc[1] && <CreateIcon sx={{ color: 'rgb(24, 119, 242)'}}/>}
+              </Stack>
+              <ArticleIcon style={{width: '70%', height: '100%'}} onClick={handleNavigate}/>
+            </Stack>
+          )})}
+        </div>
+    </Stack>
       <Dialog open={openDialog} onClose={handleClose}>
          <DialogTitle id="alert-dialog-title">{"Select Secure Form Options"}</DialogTitle>
             <DialogContent>
-                <form className={styles.inputForm}>
+              <form className={styles.inputForm}>
                 {/* Input Phone Number*/}
                 <FormControl fullWidth>
                     <TextField
@@ -95,6 +136,7 @@ export const SendDocuments = () => {
                       onChange={form.handleChange}
                       onBlur={form.handleBlur}
                       error={Boolean(form.touched.phoneNumber) && Boolean(form.errors.phoneNumber)}
+                      helperText={form.touched.phoneNumber && form.errors.phoneNumber}
                       fullWidth
                     />
                 </FormControl>
@@ -110,6 +152,7 @@ export const SendDocuments = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                     error={Boolean(form.touched.date) && Boolean(form.errors.date)}
+                    helperText={form.touched.date && form.errors.date}
                     fullWidth
                   />
                 </FormControl>
@@ -125,16 +168,21 @@ export const SendDocuments = () => {
                       onChange={form.handleChange}
                       onBlur={form.handleBlur}
                       error={Boolean(form.touched.location) && Boolean(form.errors.location)}
+                      helperText={form.touched.location && form.errors.location}
                       fullWidth
                   />
                 </FormControl>
+                <div>
+                  <input onChange={handleFileChange} type="file" accept="application/pdf"/>
+                </div>
                 </form>
+                <Typography sx={{color: 'red'}}>{error}</Typography>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} color="primary">
                   Cancel
                 </Button>
-                <Button onClick={handleClose} color="primary" autoFocus>
+                <Button onClick={form.handleSubmit} color="primary" type='submit'>
                   Confirm
                 </Button>
               </DialogActions>

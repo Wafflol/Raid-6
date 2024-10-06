@@ -12,6 +12,22 @@
   gap: 32px;
   flex-direction: column;
   display: flex;
-  width: 75%;
   margin-bottom: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.gridContainer {
+  padding-bottom: 140px;
+  overflow: scroll;
+  padding-top: 16px;
+}
+
+.gridItem {
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
 }

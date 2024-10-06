@@ -6,6 +6,7 @@ import styles from './LoginSignup.module.css';
 import { register } from '../../api/apiRequests';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/appContexts';
+import Logo from './logo.png'
 
 export const Signup = () => {
 
@@ -51,6 +52,7 @@ export const Signup = () => {
 
   return (
     <Stack className={styles.signup}>
+      <img src={Logo} style={{width: '160px', height: '150px', position: 'fixed', top: '20px'}}/>
       <Typography className={styles.textFont} variant='h1'>VerifI</Typography>
       <Typography className={styles.textFont} variant='h4'>Sign. Seal. Secure.</Typography>
       <form className={styles.inputForm} onSubmit={form.handleSubmit}>
