@@ -19,9 +19,9 @@ export const Switch = () => {
   const { isLoggedIn } = useContext(AppContext);
 
   useEffect(() => {
-    // if (!isLoggedIn) {
-    //   navigate('/');
-    // }
+    if (!isLoggedIn) {
+      navigate('/');
+    }
 
     const location = window.location.href.split('/');
     const endRef = location[location.length - 1];
