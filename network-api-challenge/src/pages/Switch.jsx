@@ -9,33 +9,38 @@ import { SendDocuments } from "./SendDocuments";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/appContexts";
+import { Viewer } from "./Docs/DocumentViewer";
 
 export const Switch = () => {
 
   const navigate = useNavigate();
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("");
 
   const { isLoggedIn } = useContext(AppContext);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/');
-    }
+    // if (!isLoggedIn) {
+    //   navigate('/');
+    // }
 
     const location = window.location.href.split('/');
     const endRef = location[location.length - 1];
     if (endRef === "home") {
       setTitle('Document Centre')
-    } else {
+    } else if (endRef === "send") {
       setTitle('Send Documents')
+    } else {
+      setTitle('Document')
     }
   }, [])
   
-  const switchPage = (href, newTitle) => {
+  const switchPage = (href) => {
     if (href === "/home") {
       setTitle("Document Centre");
-    } else {
+    } else if (href === "/home/send") {
       setTitle("Send Documents");
+    } else {
+      setTitle("Document");
     }
     navigate(href);
   }
@@ -47,8 +52,9 @@ export const Switch = () => {
         <Typography variant='h3'>{title}</Typography>
       </div>
       <Routes>
-        <Route path='/' Component={DocumentCentre}/>
+        <Route path='/' element={<DocumentCentre switchPage={switchPage} />}/>
         <Route exact path='/send' Component={SendDocuments} />
+        <Route path="/viewer" element={<Viewer pdfUrl={"https://www.mta.ca/~rrosebru/oldcourse/263114/Dsa.pdf"}/>} />
       </Routes>
       <Tabs className={styles.navTab}>
         <Tab className={[styles.singleTab, styles.leftTab]} icon={<DocumentScannerIcon className={styles.tabIcon}/>} onClick={() => {switchPage('/home')}}/>
